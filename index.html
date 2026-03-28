@@ -12,10 +12,8 @@
         <h1>Task Manager</h1>
         </div>
         <div class="taskInput">
-            <div class="placeholder">
-            <input type="text" placeholder="Enter a new task"/> 
-            </div>
-            <button class="addTask">Add Task</button>
+            <input id="enterBox" type="text" placeholder="Enter a new task"/> 
+            <button class="addTask" id="addTaskBtn">Add Task</button>
         </div>
         <div class="threeButtons">
         <button>All</button>
@@ -23,12 +21,15 @@
         <button>Pending</button>
         </div>
         <div class="tasks">
-        <p>0 Tasks</p>
+        <ul id="taskList"></ul>
+        <p id="taskCounter">0 Tasks</p>
         </div>
     </div>
-    
+    <script src ="js/app.js" ></script>
 </body>
 </html>
 
 
 
+<!-- ul unordered list e.g <ul><li></li></ul> -->
+ <!-- ol ordered list -->
