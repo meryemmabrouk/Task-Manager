@@ -2,9 +2,14 @@ const enterBox = document.getElementById("enterBox")
 const addTaskBtn = document.getElementById("addTaskBtn")
 const taskList = document.getElementById("taskList")
 const taskCounter = document.getElementById("taskCounter")
-
+const filterButtons = document.querySelectorAll(".threeButtons button")
+const allBtn = document.getElementById(".allBtn button")
+const completedBtn = document.getElementById(".completedBtn button")
+const pendingBtn = document.getElementById(".pendingBtn button")
 
 let tasks = []
+
+// task= change colour of 3 buttons
 
 function displayTasks (){
 taskList.innerHTML = ""
@@ -14,19 +19,30 @@ tasks.forEach(
         li.textContent = task.title
         const deleteBtn = document.createElement("button")
         deleteBtn.textContent = "Delete"
+        deleteBtn.classList.add("deleteBtn")
         deleteBtn.addEventListener("click" , function(){
-            tasks= tasks.filter((t)=> t.id !== task.id )
+        deleteTask(task.id)
         })
         li.appendChild(deleteBtn)
         taskList.appendChild(li)
+
+
     }
 )
 
 taskCounter.textContent= `${tasks.length} tasks`
 }
 
+function deleteTask(id){
+     tasks= tasks.filter((t)=> t.id !== id) 
+     displayTasks()
+}
+
 addTaskBtn.addEventListener("click" , function(){
-     const task = enterBox.value
+     const task = enterBox.value.trim()
+     if(task===""){
+        return
+     }
      const newTask={
         id: Date.now(),
         title: task,
@@ -35,11 +51,13 @@ addTaskBtn.addEventListener("click" , function(){
      tasks.push(newTask)
 
      displayTasks()
-
+     enterBox.value = ""
 })
 
 console.log ("meryem")
 
+
+//    DOM MANIPULATION DOCUMENT OBJECT MANIPULATION 
 
 // let name = "Meryem"
 // const age = 15
