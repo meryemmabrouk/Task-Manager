@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+
 }
 
 body {
@@ -69,3 +70,48 @@ button {
 .tasks {
   margin-left: 160px;
 }
+
+
+.deleteBtn{
+  background-color: rgb(147, 9, 9);
+  color: #ffffffee;
+}
+
+.taskList{
+ background-color: rgb(133, 9, 250);
+}
+
+#allBtn{
+  background-color: rgb(121, 154, 230);
+  color: #ffffffee;
+}
+
+#completedBtn{
+  background-color: rgb(170, 207, 133);
+  color: #ffffffee;
+}
+
+#pendingBtn{
+  background-color: rgb(229, 141, 78);
+  color: #ffffffee;
+}
+
+#taskCounter{
+  text-align: center;
+}
+
+ul{
+  list-style: none;
+  margin-bottom: 15px;
+}
+
+li{
+  padding: 8px;
+  border-bottom: 1px solid #eeee;
+  display: flex ;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+/* task= change colour of 3 buttons */
