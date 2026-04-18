@@ -114,4 +114,9 @@ li{
 
 }
 
+li.completed{
+  color: green;
+}
+
 /* task= change colour of 3 buttons */
+/* PUSH */

@@ -11,26 +11,54 @@ let tasks = []
 
 // task= change colour of 3 buttons
 
-function displayTasks (){
+function displayTasks (filteredTasks = tasks){
 taskList.innerHTML = ""
-tasks.forEach(
+
+if(filteredTasks.length === 0){
+    taskList.innerHTML = "<p>No tasks available</p>"
+}
+
+filteredTasks.forEach(
     (task) => {
         const li = document.createElement("li")
         li.textContent = task.title
+        
+        if(task.completed){
+            li.classList.add("completed")
+        }
+        
+        const toggleBtn = document.createElement("button")
+        toggleBtn.textContent = "Toggle"
+        toggleBtn.addEventListener("click" , function(){
+            task.completed != task.completed
+            displayTasks()
+        })
+
+
         const deleteBtn = document.createElement("button")
         deleteBtn.textContent = "Delete"
         deleteBtn.classList.add("deleteBtn")
         deleteBtn.addEventListener("click" , function(){
         deleteTask(task.id)
         })
+        li.appendChild(toggleBtn)
         li.appendChild(deleteBtn)
         taskList.appendChild(li)
-
-
     }
 )
-
 taskCounter.textContent= `${tasks.length} tasks`
+}
+
+function toggleCompleted(id){
+    tasks = tasks.map((t) => {
+        if(t.id === id){
+           return{
+            ...t,completed: !t.completed
+           }
+        }
+        return t
+    })
+    displayTasks()
 }
 
 function deleteTask(id){
@@ -43,18 +71,55 @@ addTaskBtn.addEventListener("click" , function(){
      if(task===""){
         return
      }
+
+    const doubleTitle = task.toLowerCase()
+
+     const isDuplicate = tasks.some(
+        (task) => task.title.toLowerCase() === doubleTitle
+     )
+
+     if(isDuplicate){
+        alert("task already exists")
+        return
+    }
+
      const newTask={
         id: Date.now(),
         title: task,
         completed: false
      }
      tasks.push(newTask)
-
+     console.log (tasks)
      displayTasks()
      enterBox.value = ""
 })
 
+filterButtons.forEach(
+    (button) => {button.addEventListener("click" , function(){
+        const filterType = button.dataset.filter
+        if(filterType === "all"){
+            displayTasks(tasks)
+        }
+        if (filterType === "completed"){
+            const completedTasks = tasks.filter( (task) => {task.completed} )
+            displayTasks(completedTasks)
+        }
+
+        if (filterType === "pending"){
+            const pendingTasks = tasks.filter( (task) => !task.completed )
+            displayTasks(pendingTasks)
+        }
+        
+        
+
+    }
+)}
+)
+
+
 console.log ("meryem")
+
+
 
 
 //    DOM MANIPULATION DOCUMENT OBJECT MANIPULATION 
