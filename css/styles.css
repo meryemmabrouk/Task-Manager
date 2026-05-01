@@ -81,6 +81,16 @@ button {
  background-color: rgb(133, 9, 250);
 }
 
+.btn-group{
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.task-text{
+  flex: 1;
+}
+
 #allBtn{
   background-color: rgb(121, 154, 230);
   color: #ffffffee;
@@ -100,6 +110,8 @@ button {
   text-align: center;
 }
 
+
+
 ul{
   list-style: none;
   margin-bottom: 15px;
@@ -118,5 +130,17 @@ li.completed{
   color: green;
 }
 
+#clearAllBtn {
+  background-color: rgb(180, 0, 0);
+  color: white;
+  margin-left: 10px;
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+}
+
 /* task= change colour of 3 buttons */
-/* PUSH */
+/* PUSH AND SEND EMAIL */
+
+
+/* add a clear all button to clear everything and commit and put it next to add task buttun and also read through code and also when buttons are clicked give them a reaction */
