@@ -6,8 +6,21 @@ const filterButtons = document.querySelectorAll(".threeButtons button");
 const allBtn = document.getElementById("allBtn");
 const completedBtn = document.getElementById("completedBtn");
 const pendingBtn = document.getElementById("pendingBtn");
+const clearAllBtn = document.getElementById("clearAllBtn");
 
 let tasks = [];
+
+function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function loadTasks() {
+    const storedTasks = localStorage.getItem("tasks");
+
+    if (storedTasks) {
+        tasks = JSON.parse(storedTasks);
+    }
+}
 
 function displayTasks(filteredTasks = tasks) {
     taskList.innerHTML = "";
@@ -31,16 +44,16 @@ function displayTasks(filteredTasks = tasks) {
         btnGroup.classList.add("btn-group");
 
         const toggleBtn = document.createElement("button");
-        toggleBtn.textContent = "Complete";
+        toggleBtn.textContent = task.completed ? "Undo" : "Complete";
+
         toggleBtn.addEventListener("click", function () {
-            task.completed = !task.completed;
-            displayTasks();
+            toggleCompleted(task.id);
         });
 
-
-const deleteBtn = document.createElement("button");
+        const deleteBtn = document.createElement("button");
         deleteBtn.textContent = "Delete";
         deleteBtn.classList.add("deleteBtn");
+
         deleteBtn.addEventListener("click", function () {
             deleteTask(task.id);
         });
@@ -50,8 +63,10 @@ const deleteBtn = document.createElement("button");
 
         li.appendChild(taskText);
         li.appendChild(btnGroup);
+
         taskList.appendChild(li);
     });
+
     taskCounter.textContent = `${tasks.length} tasks`;
 }
 
@@ -63,18 +78,24 @@ function toggleCompleted(id) {
                 completed: !t.completed,
             };
         }
+
         return t;
     });
+
+    saveTasks();
     displayTasks();
 }
 
 function deleteTask(id) {
     tasks = tasks.filter((t) => t.id !== id);
+
+    saveTasks();
     displayTasks();
 }
 
 addTaskBtn.addEventListener("click", function () {
     const task = enterBox.value.trim();
+
     if (task === "") {
         return;
     }
@@ -86,7 +107,7 @@ addTaskBtn.addEventListener("click", function () {
     );
 
     if (isDuplicate) {
-        alert("task already exists");
+        alert("Task already exists");
         return;
     }
 
@@ -95,18 +116,24 @@ addTaskBtn.addEventListener("click", function () {
         title: task,
         completed: false,
     };
+
     tasks.push(newTask);
-    console.log(tasks);
+
+    saveTasks();
+
     displayTasks();
+
     enterBox.value = "";
 });
 
 filterButtons.forEach((button) => {
     button.addEventListener("click", function () {
         const filterType = button.dataset.filter;
+
         if (filterType === "all") {
             displayTasks(tasks);
         }
+
         if (filterType === "completed") {
             const completedTasks = tasks.filter((task) => task.completed);
             displayTasks(completedTasks);
@@ -119,16 +146,14 @@ filterButtons.forEach((button) => {
     });
 });
 
-
 clearAllBtn.addEventListener("click", function () {
     tasks = [];
+
+    localStorage.removeItem("tasks");
+
     displayTasks();
 });
 
-
-
-
-
-
-
+loadTasks();
+displayTasks();
  
