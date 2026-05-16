@@ -71,6 +71,10 @@ button:hover{
   box-shadow: 0 4px 12px rgb(103, 103, 103);
 }
 
+button.active{
+  box-shadow: 0 4px 12px rgb(103, 103, 103);
+}
+
 .tasks {
   margin-left: 160px;
 }

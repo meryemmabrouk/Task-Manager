@@ -30,6 +30,7 @@ function displayTasks(filteredTasks = tasks) {
     }
 
     filteredTasks.forEach((task) => {
+
         const li = document.createElement("li");
 
         const taskText = document.createElement("span");
@@ -67,7 +68,8 @@ function displayTasks(filteredTasks = tasks) {
         taskList.appendChild(li);
     });
 
-    taskCounter.textContent = `${tasks.length} tasks`;
+    taskCounter.textContent = `${filteredTasks.length} tasks`; 
+    // displays number of tasks
 }
 
 function toggleCompleted(id) {
@@ -78,7 +80,6 @@ function toggleCompleted(id) {
                 completed: !t.completed,
             };
         }
-
         return t;
     });
 
@@ -96,14 +97,12 @@ function deleteTask(id) {
 addTaskBtn.addEventListener("click", function () {
     const task = enterBox.value.trim();
 
-    if (task === "") {
-        return;
-    }
+    if (task === "") return;
 
     const doubleTitle = task.toLowerCase();
 
     const isDuplicate = tasks.some(
-        (task) => task.title.toLowerCase() === doubleTitle,
+        (t) => t.title.toLowerCase() === doubleTitle
     );
 
     if (isDuplicate) {
@@ -120,7 +119,6 @@ addTaskBtn.addEventListener("click", function () {
     tasks.push(newTask);
 
     saveTasks();
-
     displayTasks();
 
     enterBox.value = "";
@@ -130,17 +128,20 @@ filterButtons.forEach((button) => {
     button.addEventListener("click", function () {
         const filterType = button.dataset.filter;
 
+        filterButtons.forEach((btn) => btn.classList.remove("active") )
+        button.classList.add("active")
+
         if (filterType === "all") {
             displayTasks(tasks);
         }
 
         if (filterType === "completed") {
-            const completedTasks = tasks.filter((task) => task.completed);
+            const completedTasks = tasks.filter((t) => t.completed);
             displayTasks(completedTasks);
         }
 
         if (filterType === "pending") {
-            const pendingTasks = tasks.filter((task) => !task.completed);
+            const pendingTasks = tasks.filter((t) => !t.completed);
             displayTasks(pendingTasks);
         }
     });
@@ -148,12 +149,9 @@ filterButtons.forEach((button) => {
 
 clearAllBtn.addEventListener("click", function () {
     tasks = [];
-
     localStorage.removeItem("tasks");
-
     displayTasks();
 });
 
 loadTasks();
 displayTasks();
- 
