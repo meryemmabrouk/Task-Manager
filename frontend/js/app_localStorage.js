@@ -10,15 +10,15 @@ const clearAllBtn = document.getElementById("clearAllBtn");
 
 let tasks = [];
 
-const API_URL = "http://localhost:5000/tasks"
+function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
 
-async function loadTasks(){
-    try{
-        const response = await fetch(API_URL)
-        tasks = await response.json()
-    }catch(error){
-        console.log("could not connect to server", error)
-        tasks= []
+function loadTasks() {
+    const storedTasks = localStorage.getItem("tasks");
+
+    if (storedTasks) {
+        tasks = JSON.parse(storedTasks);
     }
 }
 
@@ -69,7 +69,7 @@ function displayTasks(filteredTasks = tasks) {
     });
 
     taskCounter.textContent = `${filteredTasks.length} tasks`; 
-    
+    // displays number of tasks
 }
 
 function toggleCompleted(id) {
@@ -94,35 +94,34 @@ function deleteTask(id) {
     displayTasks();
 }
 
-addTaskBtn.addEventListener("click", async function () {
+addTaskBtn.addEventListener("click", function () {
     const task = enterBox.value.trim();
 
     if (task === "") return;
 
     const doubleTitle = task.toLowerCase();
-    try{
-        const response = await fetch(API_URL, {
-            method : "POST", 
-            headers : {"Content-Type":"application/json"},
-            body : JSON.stringify({title: task})
-        })
-        if(!response.ok){
-            const errorData = await response.json()
-            alert(errorData.error)
-            return
-        }
 
-    await loadTasks()
+    const isDuplicate = tasks.some(
+        (t) => t.title.toLowerCase() === doubleTitle
+    );
 
+    if (isDuplicate) {
+        alert("Task already exists");
+        return;
+    }
+
+    const newTask = {
+        id: Date.now(),
+        title: task,
+        completed: false,
+    };
+
+    tasks.push(newTask);
+
+    saveTasks();
     displayTasks();
 
     enterBox.value = "";
-
-    }catch(error){
-        console.log("could not add your task ", error)
-    }
-   
-    
 });
 
 filterButtons.forEach((button) => {
@@ -154,8 +153,5 @@ clearAllBtn.addEventListener("click", function () {
     displayTasks();
 });
 
-async function init (){
-    await loadTasks()
-    displayTasks()
-}
-init()
+loadTasks();
+displayTasks();
