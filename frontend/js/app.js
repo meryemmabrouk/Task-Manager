@@ -10,7 +10,8 @@ const clearAllBtn = document.getElementById("clearAllBtn");
 
 let tasks = [];
 
-const API_URL = "http://localhost:5000/tasks"
+const API_URL = "/tasks"
+~
 
 async function loadTasks(){
     try{
@@ -55,8 +56,10 @@ function displayTasks(filteredTasks = tasks) {
         deleteBtn.textContent = "Delete";
         deleteBtn.classList.add("deleteBtn");
 
-        deleteBtn.addEventListener("click", function () {
-            deleteTask(task.id);
+        deleteBtn.addEventListener("click", async function () {
+            await fetch(`${API_URL}/${task.id}`, {method:"DELETE"})
+            await loadTasks()
+            displayTasks() 
         });
 
         btnGroup.appendChild(toggleBtn);

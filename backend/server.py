@@ -1,12 +1,15 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import json 
 import os
 import time
 
-app = Flask(__name__)
-CORS(app)
-TASKS_FILE = "tasks.json"
+BASE_DIR = os.path.dirname(__file__)
+FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
+
+app = Flask(__name__, static_folder= FRONTEND_DIR, static_url_path= "")
+# CORS(app)
+TASKS_FILE = os.path.join(BASE_DIR, "tasks.json")
 
 def load_tasks():
     if os.path.exists(TASKS_FILE):
@@ -20,7 +23,10 @@ def save_tasks(tasks):
 
 @app.route("/")
 def home():
-    return "task manager API is running"
+    return send_from_directory(FRONTEND_DIR,"index.html")
+    # return "task manager API is running"
+
+ 
 
 @app.route("/tasks", methods = ["GET"])
 def get_tasks():
@@ -49,4 +55,4 @@ def add_tasks():
     return jsonify(new_task),201
 
 if __name__ == "__main__":
-    app.run(debug = True, port = 5000)
+    app.run(debug = True, port = 5001)
