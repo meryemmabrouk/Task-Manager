@@ -10,8 +10,8 @@ const clearAllBtn = document.getElementById("clearAllBtn");
 
 let tasks = [];
 
-const API_URL = "/tasks"
-~
+const API_URL = "http://localhost:5001/tasks";
+
 
 async function loadTasks(){
     try{
@@ -98,6 +98,11 @@ function deleteTask(id) {
 }
 
 addTaskBtn.addEventListener("click", async function () {
+    
+    addTaskBtn.addEventListener("click", async () => {
+    console.log("Add button clicked");
+});
+    
     const task = enterBox.value.trim();
 
     if (task === "") return;

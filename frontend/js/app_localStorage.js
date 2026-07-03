@@ -95,6 +95,11 @@ function deleteTask(id) {
 }
 
 addTaskBtn.addEventListener("click", function () {
+    
+addTaskBtn.addEventListener("click", async () => {
+    console.log("Add button clicked");
+});
+
     const task = enterBox.value.trim();
 
     if (task === "") return;

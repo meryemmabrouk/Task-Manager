@@ -8,14 +8,15 @@ BASE_DIR = os.path.dirname(__file__)
 FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
 
 app = Flask(__name__, static_folder= FRONTEND_DIR, static_url_path= "")
-# CORS(app)
+CORS(app)
 TASKS_FILE = os.path.join(BASE_DIR, "tasks.json")
 
 def load_tasks():
     if os.path.exists(TASKS_FILE):
         with open(TASKS_FILE, "r") as f:
             return json.load(f)
-        return []
+
+    return []
     
 def save_tasks(tasks):
     with open(TASKS_FILE, "w") as f:
@@ -45,7 +46,7 @@ def add_tasks():
     tasks = load_tasks()
     for task in tasks:
         if task["title"].lower() == title.lower():
-            return ({"ERROR " : "task already exists"}),400
+            return jsonify({"error": "Task already exists"}), 400
     new_task= {
         "id": int(time.time()*1000),
         "title": title,
