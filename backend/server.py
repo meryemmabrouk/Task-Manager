@@ -55,5 +55,22 @@ def add_tasks():
     save_tasks(tasks)
     return jsonify(new_task),201
 
+@app.route("/tasks/<int:task_id>", methods = ["DELETE"])
+def delete_tasks(task_id):
+    tasks = load_tasks()
+    original_length = len(tasks)
+    tasks = [task for task in tasks if task["id"] != task_id]
+    if len(tasks) == original_length:
+        return jsonify({"ERROR " : "task not found"}),404
+    save_tasks(tasks)
+    return jsonify({"message" : "task deleted"}),200
+
+@app.route("/tasks", methods = ["DELETE"])
+def clear_all():
+    save_tasks([])
+    return jsonify({"message" : "all tasks cleared"}),200
+    
+
+
 if __name__ == "__main__":
     app.run(debug = True, port = 5001)

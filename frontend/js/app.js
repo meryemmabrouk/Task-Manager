@@ -10,7 +10,7 @@ const clearAllBtn = document.getElementById("clearAllBtn");
 
 let tasks = [];
 
-const API_URL = "http://localhost:5001/tasks";
+const API_URL = "/tasks";
 
 
 async function loadTasks(){
@@ -35,8 +35,14 @@ function displayTasks(filteredTasks = tasks) {
         const li = document.createElement("li");
 
         const taskText = document.createElement("span");
-        taskText.textContent = task.title;
-        taskText.classList.add("task-text");
+
+taskText.textContent = task.title.slice(0, 20);
+
+if (task.title.length > 20) {
+    taskText.textContent += "...";
+}
+
+taskText.classList.add("task-text");
 
         if (task.completed) {
             li.classList.add("completed");
@@ -48,7 +54,8 @@ function displayTasks(filteredTasks = tasks) {
         const toggleBtn = document.createElement("button");
         toggleBtn.textContent = task.completed ? "Undo" : "Complete";
 
-        toggleBtn.addEventListener("click", function () {
+        toggleBtn.addEventListener("click", function () { 
+            // call endpoint
             toggleCompleted(task.id);
         });
 
@@ -57,6 +64,7 @@ function displayTasks(filteredTasks = tasks) {
         deleteBtn.classList.add("deleteBtn");
 
         deleteBtn.addEventListener("click", async function () {
+            console.log("delete button clicked")
             await fetch(`${API_URL}/${task.id}`, {method:"DELETE"})
             await loadTasks()
             displayTasks() 
@@ -75,20 +83,20 @@ function displayTasks(filteredTasks = tasks) {
     
 }
 
-function toggleCompleted(id) {
-    tasks = tasks.map((t) => {
-        if (t.id === id) {
-            return {
-                ...t,
-                completed: !t.completed,
-            };
-        }
-        return t;
-    });
+// function toggleCompleted(id) {
+//     tasks = tasks.map((t) => {
+//         if (t.id === id) {
+//             return {
+//                 ...t,
+//                 completed: !t.completed,
+//             };
+//         }
+//         return t;
+//     });
 
-    saveTasks();
-    displayTasks();
-}
+//     saveTasks();
+//     displayTasks();
+// }
 
 function deleteTask(id) {
     tasks = tasks.filter((t) => t.id !== id);
@@ -98,16 +106,11 @@ function deleteTask(id) {
 }
 
 addTaskBtn.addEventListener("click", async function () {
-    
-    addTaskBtn.addEventListener("click", async () => {
     console.log("Add button clicked");
-});
-    
     const task = enterBox.value.trim();
 
     if (task === "") return;
 
-    const doubleTitle = task.toLowerCase();
     try{
         const response = await fetch(API_URL, {
             method : "POST", 
@@ -156,9 +159,9 @@ filterButtons.forEach((button) => {
     });
 });
 
-clearAllBtn.addEventListener("click", function () {
-    tasks = [];
-    localStorage.removeItem("tasks");
+clearAllBtn.addEventListener("click", async function () {
+    await fetch(API_URL, {method:"DELETE"})
+    await loadTasks()
     displayTasks();
 });
 
@@ -167,3 +170,6 @@ async function init (){
     displayTasks()
 }
 init()
+
+// commit
+// try limiting the length of the input and display elipsis after exceedddinding length or just limit overalll anbd dont let them go past teh limit and maybe liek 30 characters and then od elipsis after and do not display everything
